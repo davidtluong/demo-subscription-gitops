@@ -14,7 +14,4 @@ spec:
     name: toweraccess
   channel: demo/gitops
   placement:
-    placementRef:
-      kind: PlacementRule
-      name: pacman-ansible-demo-placement-0
-
+    local: true

@@ -1,4 +1,4 @@
 resources:
-- ns.yaml
+  #- ns.yaml
 - deployment.yaml
 - service-green.yaml

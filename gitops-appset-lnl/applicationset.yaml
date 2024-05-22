@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook-bluegreen
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - cluster: green
+        url: https://127.0.0.1
+      - cluster: blue
+        url: https://api.cloudmgmt-ocp.gsslab.rdu2.redhat.com:6443
+  template:
+    metadata:
+      name: '{{.cluster}}-guestbook'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/rh-dluong/demo-subscription-gitops.git
+        targetRevision: app-lnl
+        path: blueGreen/nginx/{{.cluster}}-ingress
+      destination:
+        server: '{{.url}}'
+        namespace: guestbook
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

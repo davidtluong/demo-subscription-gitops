@@ -8,32 +8,3 @@ metadata:
 spec:
   type: HelmRepo
   pathname: https://helm.github.io/examples
----
-apiVersion: apps.open-cluster-management.io/v1
-kind: Subscription
-metadata:
-  name: helm-subscription
-  namespace: helm-sub-lnl
-spec:
-  channel: helm-sub-lnl/helm-channel
-  name: hello-world
-  packageOverrides:
-  - packageName: hello-world
-    packageAlias: hello-world
-    #    packageAlias: nginx-ingress-simple
-    packageOverrides:
-    - path: spec
-      value:
-        nameOverride: hello-world-app
-        service:
-          type: ClusterIP
-          port: 80
-        serviceAccount:
-          create: false
-        image:
-          pullPolicy: Always
-          repository: quay.io/redhattraining/hello-world-nginx
-          tag: latest
-
-  placement:
-    local: true

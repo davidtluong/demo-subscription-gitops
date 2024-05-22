@@ -1,0 +1,58 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: helm-subscription
+  namespace: helm-sub-lnl
+  annotations:
+    apps.open-cluster-management.io/deployables: ''
+    apps.open-cluster-management.io/subscriptions: helm-sub-lnl/helm-subscription-subscription-1
+    open-cluster-management.io/user-group: Q2x1c3RlciBBZG1pbmlzdHJhdG9ycyxzeXN0ZW06YXV0aGVudGljYXRlZDpvYXV0aCxzeXN0ZW06YXV0aGVudGljYXRlZA==
+    open-cluster-management.io/user-identity: ZGx1b25nQHJlZGhhdC5jb20=
+spec:
+  componentKinds:
+    - group: apps.open-cluster-management.io
+      kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - helm-subscription
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: helm-subscription-subscription-1
+  namespace: helm-sub-lnl
+  annotations:
+    apps.open-cluster-management.io/manual-refresh-time: '2024-05-22T19:15:18.770Z'
+    open-cluster-management.io/user-group: Q2x1c3RlciBBZG1pbmlzdHJhdG9ycyxzeXN0ZW06YXV0aGVudGljYXRlZDpvYXV0aCxzeXN0ZW06YXV0aGVudGljYXRlZA==
+    open-cluster-management.io/user-identity: ZGx1b25nQHJlZGhhdC5jb20=
+  labels:
+    app: helm-subscription
+    app.kubernetes.io/part-of: helm-subscription
+    apps.open-cluster-management.io/reconcile-rate: low
+spec:
+  name: hello-world
+  channel: helm-sub-lnl/helm-channel
+  packageOverrides:
+    - packageAlias: hello-world
+      packageName: hello-world
+      packageOverrides:
+        - path: spec
+          value:
+            image:
+              pullPolicy: Always
+              repository: quay.io/redhattraining/hello-world-nginx
+              tag: latest
+            nameOverride: hello-world-app
+            service:
+              port: 80
+              type: ClusterIP
+            serviceAccount:
+              create: false
+  placement:
+    local: true
+posthooks: {}
+prehooks: {}

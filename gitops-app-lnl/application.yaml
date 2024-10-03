@@ -1,12 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: guestbook
+  name: pacman
+  namespace: openshift-gitops
 spec:
   destination:
     name: ''
     namespace: gitops-app-lnl
-    server: 'https://api.cloudmgmt-ocp.gsslab.rdu2.redhat.com:6443'
+    server: 'https://api.acm-ansible-ocp-04.cee.ral3.lab.eng.rdu2.redhat.com:6443'
   source:
     path: ansible/pacman
     repoURL: 'https://github.com/rh-dluong/demo-subscription-gitops.git'
